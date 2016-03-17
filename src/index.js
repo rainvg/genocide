@@ -87,7 +87,7 @@ function genocide(pid)
   {
     return new Promise(function(resolve)
     {
-      var tk = child_process.spawn('taskkill /pid ' + pid + ' /T /F', {detached: true});
+      var tk = child_process.spawn('taskkill', ['/pid', pid.toString(), '/T', '/F'], {detached: true});
       tk.on('close', function()
       {
         resolve();
