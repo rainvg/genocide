@@ -11,7 +11,7 @@ function get_children(pid)
     },
     linux: function(pid)
     {
-      child_process.spawn('ps', ['-o', 'pid', '--no-headers', '--ppid', pid.toString()]);
+      return child_process.spawn('ps', ['-o', 'pid', '--no-headers', '--ppid', pid.toString()]);
     }
   };
 
@@ -83,6 +83,18 @@ function genocide(pid)
 {
   'use strict';
 
+  if(process.platform === 'win32')
+  {
+    return new Promise(function(resolve)
+    {
+      var tk = child_process.spawn('taskkill /pid ' + pid + ' /T /F', {detached: true});
+      tk.on('close', function()
+      {
+        resolve();
+      });
+    });
+  }
+
   return get_tree(pid).then(function(tree)
   {
     (function recurkill(bpid, branch)
@@ -101,7 +113,7 @@ function genocide(pid)
 function seppuku()
 {
   'use strict';
-  child_process.fork(__filename, [process.pid.toString()]);
+  child_process.spawn(process.argv[0], [__filename, process.pid.toString()], {detached: true});
 }
 
 if(require.main === module)
