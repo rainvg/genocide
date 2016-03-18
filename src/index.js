@@ -113,7 +113,7 @@ function genocide(pid)
 function seppuku()
 {
   'use strict';
-  child_process.spawn(process.argv[0], [__filename, process.pid.toString()], {detached: true});
+  child_process.spawn(process.argv[0], [__filename, process.pid.toString()], {detached: true, env: {ELECTRON_RUN_AS_NODE: true}});
 }
 
 if(require.main === module)
