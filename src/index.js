@@ -103,7 +103,7 @@ function genocide(pid)
         return;
 
       for(var b in branch)
-        recurkill(b, branch[b]);
+        recurkill(parseInt(b, 10), branch[b]);
 
       process.kill(bpid, 'SIGKILL');
     })(pid, tree);
